@@ -1,0 +1,110 @@
+input
+  FrequenciaPtos(4.3);     // Estamos jogando do nosso dataset pra cá
+  MostrarRef(true);        // Nossa linha de referência é o ajuste
+
+var
+  Base      : Float;
+  AjusteAux : Float;       // Memória para guardar o preço das 16h
+  // Variáveis para as 15 Resistências
+  R1, R2, R3, R4, R5, R6, R7, R8, R9, R10, R11, R12, R13, R14, R15 : Float;
+  // Variáveis para os 15 Suportes
+  S1, S2, S3, S4, S5, S6, S7, S8, S9, S10, S11, S12, S13, S14, S15 : Float;
+
+begin
+  // 1. LÓGICA DE CAPTURA DO AJUSTE (16H)
+  
+  // Monitora o horário: Se for o primeiro candle das 16h ou depois, salva o valor.
+  // Isso captura o preço de referência da tarde para usar no dia seguinte.
+  if (Time >= 1600) and (Time[1] < 1600) then
+    AjusteAux := Close;
+
+  // Na virada do dia (Data atual diferente da anterior), definimos a Base
+  // usando o valor que foi capturado ontem às 16h (AjusteAux).
+  if (Date <> Date[1]) then
+    Base := AjusteAux;
+
+  // Fallback de Segurança:
+  // Se for o primeiro dia do gráfico ou se por algum motivo a Base estiver zerada,
+  // usa o Fechamento Anterior (CloseD(1)) para não deixar o gráfico em branco.
+  if (Base = 0) then Base := CloseD(1);
+
+  // 2. CÁLCULO DOS NÍVEIS
+  // Referência para deslocamente de preço Risk on
+  R1  := Base + (FrequenciaPtos * 1);
+  R2  := Base + (FrequenciaPtos * 2);
+  R3  := Base + (FrequenciaPtos * 3);
+  R4  := Base + (FrequenciaPtos * 4);
+  R5  := Base + (FrequenciaPtos * 5);
+  R6  := Base + (FrequenciaPtos * 6);
+  R7  := Base + (FrequenciaPtos * 7);
+  R8  := Base + (FrequenciaPtos * 8);
+  R9  := Base + (FrequenciaPtos * 9);
+  R10 := Base + (FrequenciaPtos * 10);
+  R11 := Base + (FrequenciaPtos * 11);
+  R12 := Base + (FrequenciaPtos * 12);
+  R13 := Base + (FrequenciaPtos * 13);
+  R14 := Base + (FrequenciaPtos * 14);
+  R15 := Base + (FrequenciaPtos * 15);
+
+  // Referência para venda Risk Off
+  S1  := Base - (FrequenciaPtos * 1);
+  S2  := Base - (FrequenciaPtos * 2);
+  S3  := Base - (FrequenciaPtos * 3);
+  S4  := Base - (FrequenciaPtos * 4);
+  S5  := Base - (FrequenciaPtos * 5);
+  S6  := Base - (FrequenciaPtos * 6);
+  S7  := Base - (FrequenciaPtos * 7);
+  S8  := Base - (FrequenciaPtos * 8);
+  S9  := Base - (FrequenciaPtos * 9);
+  S10 := Base - (FrequenciaPtos * 10);
+  S11 := Base - (FrequenciaPtos * 11);
+  S12 := Base - (FrequenciaPtos * 12);
+  S13 := Base - (FrequenciaPtos * 13);
+  S14 := Base - (FrequenciaPtos * 14);
+  S15 := Base - (FrequenciaPtos * 15);
+
+  // 3. PLOTAGEM E ESTILIZAÇÃO
+  
+  // Plot 1: Referência Central (Amarela)
+  if (MostrarRef) then
+  begin
+    Plot(Base);
+    SetPlotColor(1, clYellow);
+    SetPlotWidth(1, 2);
+  end;
+
+  // --- Resistências (Verde) ---
+  Plot2(R1);  SetPlotColor(2, clGreen);
+  Plot3(R2);  SetPlotColor(3, clGreen);
+  Plot4(R3);  SetPlotColor(4, clGreen);
+  Plot5(R4);  SetPlotColor(5, clGreen);
+  Plot6(R5);  SetPlotColor(6, clGreen);
+  Plot7(R6);  SetPlotColor(7, clGreen);
+  Plot8(R7);  SetPlotColor(8, clGreen);
+  Plot9(R8);  SetPlotColor(9, clGreen);
+  Plot10(R9); SetPlotColor(10, clGreen);
+  Plot11(R10); SetPlotColor(11, clGreen);
+  Plot12(R11); SetPlotColor(12, clGreen);
+  Plot13(R12); SetPlotColor(13, clGreen);
+  Plot14(R13); SetPlotColor(14, clGreen);
+  Plot15(R14); SetPlotColor(15, clGreen);
+  Plot16(R15); SetPlotColor(16, clGreen);
+
+  // --- Suportes (Vermelho) ---
+  Plot17(S1);  SetPlotColor(17, clRed);
+  Plot18(S2);  SetPlotColor(18, clRed);
+  Plot19(S3);  SetPlotColor(19, clRed);
+  Plot20(S4);  SetPlotColor(20, clRed);
+  Plot21(S5);  SetPlotColor(21, clRed);
+  Plot22(S6);  SetPlotColor(22, clRed);
+  Plot23(S7);  SetPlotColor(23, clRed);
+  Plot24(S8);  SetPlotColor(24, clRed);
+  Plot25(S9);  SetPlotColor(25, clRed);
+  Plot26(S10); SetPlotColor(26, clRed);
+  Plot27(S11); SetPlotColor(27, clRed);
+  Plot28(S12); SetPlotColor(28, clRed);
+  Plot29(S13); SetPlotColor(29, clRed);
+  Plot30(S14); SetPlotColor(30, clRed);
+  Plot31(S15); SetPlotColor(31, clRed);
+
+end;
